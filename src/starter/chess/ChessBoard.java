@@ -16,6 +16,7 @@ public interface ChessBoard {
      */
     void addPiece(ChessPosition position, ChessPiece piece);
 
+    void removePiece(ChessPosition position, ChessPiece piece);
     /**
      * Gets a chess piece on the chessboard
      * 
@@ -30,4 +31,9 @@ public interface ChessBoard {
      * (How the game of chess normally starts)
      */
     void resetBoard();
+
+    /**
+     * returns the size of the board
+     */
+    int getBoardSize();
 }
