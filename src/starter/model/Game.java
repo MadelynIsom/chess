@@ -1,0 +1,42 @@
+package model;
+
+import chess.GameImpl;
+/**
+ * represents a model object of a Game
+ * stores a gameID number,
+ * a username for the white team player,
+ * a username for the black team player,
+ * a game name,
+ * and a game object
+ */
+public class Game {
+    /**
+     * a unique ID for the game
+     */
+    public int gameID;
+    /**
+     * the username of the white team player
+     */
+    public String whiteUsername;
+    /**
+     * the username of the black team player
+     */
+    public String blackUsername;
+    /**
+     * the name of the game
+     */
+    public String gameName;
+    /**
+     * the game object implementation
+     */
+    public GameImpl game;
+
+    public Game(int gameID, String whiteUsername, String blackUsername, String gameName, GameImpl game){
+        this.gameID = gameID;
+        this.whiteUsername = whiteUsername;
+        this.blackUsername = blackUsername;
+        this.gameName = gameName;
+        this.game = game;
+    }
+
+}
