@@ -39,4 +39,20 @@ public class Game {
         this.game = game;
     }
 
+    public Game(String whiteUsername, String blackUsername, String gameName, GameImpl game){
+        this.whiteUsername = whiteUsername;
+        this.blackUsername = blackUsername;
+        this.gameName = gameName;
+        this.game = game;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Game foreignGame){
+            return (gameID == foreignGame.gameID && whiteUsername.equals(foreignGame.whiteUsername) &&
+                    blackUsername.equals(foreignGame.blackUsername) && gameName.equals(foreignGame.gameName) &&
+                    game.equals(foreignGame.game));
+        }
+        return false;
+    }
 }

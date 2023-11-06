@@ -5,9 +5,6 @@ import org.junit.jupiter.api.*;
 import service.*;
 import java.util.UUID;
 
-import javax.print.attribute.standard.JobName;
-import javax.xml.crypto.Data;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ServiceTests {
@@ -203,8 +200,10 @@ public class ServiceTests {
         JoinGameRequest joinGameRequest4 = new JoinGameRequest(token3, PlayerColor.BLACK, gameID);
         JoinGameResponse joinGameResponse4 = new JoinGame().joinGame(joinGameRequest4);
 
-        assert(joinGameResponse3.statusCode.code == 403 && joinGameResponse3.errorMessage.equals("Error: already taken"));
-        assert(joinGameResponse4.statusCode.code == 403 && joinGameResponse4.errorMessage.equals("Error: already taken"));
+        assertEquals(403, joinGameResponse3.statusCode.code);
+        assertEquals(403, joinGameResponse4.statusCode.code);
+        assertEquals(joinGameResponse3.errorMessage, "Error: already taken");
+        assertEquals(joinGameResponse4.errorMessage, "Error: already taken");
     }
 
 }

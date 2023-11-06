@@ -81,4 +81,27 @@ public class BoardImpl implements ChessBoard{
     public int getBoardSize() {
         return boardSize;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof BoardImpl foreignBoard) {
+            if(foreignBoard.boardSize != boardSize){
+                return false;
+            }
+            for(int i = 0; i < boardSize; i++){
+                for(int j = 0; j < boardSize; j++){
+                    ChessPiece piece = boardPositions[i][j];
+                    ChessPiece foreignPiece = foreignBoard.boardPositions[i][j];
+                    if(foreignPiece != null && piece != null && !piece.equals(foreignPiece)){
+                        return false;
+                    }
+                    else if((foreignPiece == null && piece != null) || (foreignPiece != null && piece == null) ){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

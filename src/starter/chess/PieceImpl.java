@@ -5,11 +5,11 @@ import java.util.Collection;
 
 public class PieceImpl implements ChessPiece{
 
-    private ChessPiece.PieceType type;
-    private ChessGame.TeamColor color;
+    private final ChessPiece.PieceType pieceType;
+    private final ChessGame.TeamColor color;
 
-    public PieceImpl(ChessPiece.PieceType type, ChessGame.TeamColor color){
-        this.type = type;
+    public PieceImpl(ChessPiece.PieceType pieceType, ChessGame.TeamColor color){
+        this.pieceType = pieceType;
         this.color = color;
     }
     @Override
@@ -19,13 +19,13 @@ public class PieceImpl implements ChessPiece{
 
     @Override
     public PieceType getPieceType() {
-        return type;
+        return pieceType;
     }
 
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         //use switch to check piece type to handle each type of moves
-        switch(type){
+        switch(pieceType){
             case KING:
                 return kingMoves(board, myPosition);
             case QUEEN:
@@ -431,7 +431,16 @@ public class PieceImpl implements ChessPiece{
         MoveImpl newMove = new MoveImpl(currPosition, reqPosition, promotionPiece);
         possibleMoves.add(newMove);
     }
-/*
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof PieceImpl foreignPiece){
+            return(foreignPiece.color == color && foreignPiece.pieceType == pieceType);
+        }
+        return false;
+    }
+
+    /*
     @Override
     public int hashCode(){
         int colorCode;

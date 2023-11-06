@@ -12,6 +12,8 @@ public class GameImpl implements ChessGame{
 
 
     public GameImpl(){
+        board = new BoardImpl();
+        board.resetBoard();
         isWhiteTurn = true;
         teamTurn = TeamColor.WHITE;
     }
@@ -225,5 +227,12 @@ public class GameImpl implements ChessGame{
         return board;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof GameImpl foreignGame){
+            return (foreignGame.board.equals(board) && foreignGame.teamTurn == teamTurn && foreignGame.isWhiteTurn == isWhiteTurn);
+        }
+        return false;
+    }
 
 }
