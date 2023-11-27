@@ -1,16 +1,17 @@
-package service;
+package request_response;
+
 /**
- * represents a LoginResponse from the server
- * stores an authToken model (if successful), a statusCode enum, and an errorMessage (if an error was thrown)
+ * represents a RegisterResponse from the server
+ * stores an authToken (if successful), a statusCode enum, and an errorMessage (if an error was thrown)
  */
 
-public class LoginResponse {
+public class RegisterResponse {
     /**
-     * the authToken to use during the user's session
+     * the authToken to use during the user's first session
      */
     public model.AuthToken authToken;
     /**
-     * the status code indicating success or failure
+     * the status code to indicate success or failure
      */
     public StatusCode statusCode;
     /**
@@ -22,7 +23,7 @@ public class LoginResponse {
      * constructor for a successful operation
      * @param authToken authToken for the user
      */
-    public LoginResponse(model.AuthToken authToken){
+    public RegisterResponse(model.AuthToken authToken){
         this.authToken = authToken;
         this.statusCode = StatusCode.SUCCESS;
     }
@@ -32,7 +33,7 @@ public class LoginResponse {
      * @param statusCode error code
      * @param errorMessage error message
      */
-    public LoginResponse(StatusCode statusCode, String errorMessage){
+    public RegisterResponse(StatusCode statusCode, String errorMessage){
         this.statusCode = statusCode;
         this.errorMessage = errorMessage;
     }

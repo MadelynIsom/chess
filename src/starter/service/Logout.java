@@ -2,6 +2,9 @@ package service;
 
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
+import request_response.LogoutRequest;
+import request_response.LogoutResponse;
+import request_response.StatusCode;
 
 /**
  * logs out a user

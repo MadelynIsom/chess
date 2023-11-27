@@ -3,6 +3,10 @@ package service;
 import dataAccess.DataAccessException;
 import dataAccess.*;
 import model.*;
+import request_response.JoinGameRequest;
+import request_response.JoinGameResponse;
+import request_response.PlayerColor;
+import request_response.StatusCode;
 
 /**
  * joins a game

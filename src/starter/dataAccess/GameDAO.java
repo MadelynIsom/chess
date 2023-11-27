@@ -7,7 +7,6 @@ import model.Game;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 

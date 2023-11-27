@@ -3,7 +3,6 @@ package dataAccess;
 import model.User;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 import static dataAccess.Database.DB;
 

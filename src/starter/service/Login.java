@@ -4,6 +4,10 @@ import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.UserDAO;
 import model.AuthToken;
+import request_response.LoginRequest;
+import request_response.LoginResponse;
+import request_response.StatusCode;
+
 import java.util.UUID;
 
 /**

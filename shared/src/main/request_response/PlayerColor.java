@@ -1,4 +1,4 @@
-package service;
+package request_response;
 
 /**
  * An enum representing which team the user is selecting

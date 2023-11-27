@@ -1,4 +1,4 @@
-package service;
+package request_response;
 /**
  * represents a request to create a new game from the client
  * simply stores what the user wants the game to be called

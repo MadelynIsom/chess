@@ -3,6 +3,10 @@ package service;
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.UserDAO;
+import request_response.RegisterRequest;
+import request_response.RegisterResponse;
+import request_response.StatusCode;
+
 import java.util.UUID;
 
 /**

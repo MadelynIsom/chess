@@ -1,4 +1,4 @@
-package service;
+package request_response;
 /**
  * represents a login request from the client
  * stores a username and password

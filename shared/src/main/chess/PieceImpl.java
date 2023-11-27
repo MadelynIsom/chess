@@ -5,8 +5,11 @@ import java.util.Collection;
 
 public class PieceImpl implements ChessPiece{
 
-    private final ChessPiece.PieceType pieceType;
-    private final ChessGame.TeamColor color;
+    private ChessPiece.PieceType pieceType;
+    private ChessGame.TeamColor color;
+
+    public PieceImpl() {
+    }
 
     public PieceImpl(ChessPiece.PieceType pieceType, ChessGame.TeamColor color){
         this.pieceType = pieceType;

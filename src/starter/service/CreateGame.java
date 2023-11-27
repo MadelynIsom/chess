@@ -5,6 +5,10 @@ import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import model.Game;
+import request_response.CreateGameRequest;
+import request_response.CreateGameResponse;
+import request_response.StatusCode;
+
 import java.util.Random;
 
 /**

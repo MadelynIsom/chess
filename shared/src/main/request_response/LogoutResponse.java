@@ -1,13 +1,11 @@
-package service;
-
+package request_response;
 /**
- * represents a JoinGameResponse from the server
+ * represents a LogoutResponse from the server
  * stores a statusCode enum and an errorMessage (if an error was thrown)
  */
-
-public class JoinGameResponse {
+public class LogoutResponse {
     /**
-     * the status code to indicate success or failure
+     * the status code indicating success or failure
      */
     public StatusCode statusCode;
     /**
@@ -15,11 +13,11 @@ public class JoinGameResponse {
      */
     public String errorMessage;
 
-    public JoinGameResponse(StatusCode statusCode){
+    public LogoutResponse(StatusCode statusCode){
         this.statusCode = statusCode;
         this.errorMessage = null;
     }
-    public JoinGameResponse(StatusCode statusCode, String errorMessage){
+    public LogoutResponse(StatusCode statusCode, String errorMessage){
         this.statusCode = statusCode;
         this.errorMessage = errorMessage;
     }

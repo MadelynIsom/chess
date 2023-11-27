@@ -1,4 +1,4 @@
-package service;
+package request_response;
 
 public class ClearApplicationResponse {
     public StatusCode statusCode;

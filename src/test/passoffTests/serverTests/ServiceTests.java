@@ -2,6 +2,7 @@ package passoffTests.serverTests;
 import dataAccess.*;
 import model.*;
 import org.junit.jupiter.api.*;
+import request_response.*;
 import service.*;
 import java.util.UUID;
 

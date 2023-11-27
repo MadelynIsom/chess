@@ -1,6 +1,8 @@
 package service;
 
 import dataAccess.*;
+import request_response.ClearApplicationResponse;
+import request_response.StatusCode;
 
 /**
  * completely wipes all model objects stored in the database

@@ -1,4 +1,4 @@
-package service;
+package request_response;
 /**
  * represents a request from the client to join a game
  * stores the color the user wants and the ID of the game being joined

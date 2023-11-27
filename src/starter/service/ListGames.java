@@ -2,6 +2,10 @@ package service;
 
 import dataAccess.*;
 import model.Game;
+import request_response.ListGamesRequest;
+import request_response.ListGamesResponse;
+import request_response.StatusCode;
+
 import java.util.ArrayList;
 
 /**

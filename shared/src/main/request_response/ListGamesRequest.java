@@ -1,4 +1,4 @@
-package service;
+package request_response;
 
 /**
  * represents a request from the client to list all games

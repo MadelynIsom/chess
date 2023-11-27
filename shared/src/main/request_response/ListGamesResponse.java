@@ -1,4 +1,4 @@
-package service;
+package request_response;
 
 import model.Game;
 import java.util.ArrayList;

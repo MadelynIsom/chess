@@ -1,4 +1,4 @@
-package service;
+package request_response;
 /**
  * represents a logout request from the client
  * user hands back the authToken to be deleted

@@ -1,4 +1,4 @@
-package service;
+package request_response;
 
 /**
  * represents a RegisterRequest from the client
