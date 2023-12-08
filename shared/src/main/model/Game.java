@@ -31,12 +31,15 @@ public class Game {
      */
     public GameImpl game;
 
-    public Game(int gameID, String whiteUsername, String blackUsername, String gameName, GameImpl game){
+    public boolean complete;
+
+    public Game(int gameID, String whiteUsername, String blackUsername, String gameName, GameImpl game, boolean complete){
         this.gameID = gameID;
         this.whiteUsername = whiteUsername;
         this.blackUsername = blackUsername;
         this.gameName = gameName;
         this.game = game;
+        this.complete = complete;
     }
 
     public Game(String whiteUsername, String blackUsername, String gameName, GameImpl game){
@@ -44,6 +47,7 @@ public class Game {
         this.blackUsername = blackUsername;
         this.gameName = gameName;
         this.game = game;
+        this.complete = false;
     }
 
     @Override

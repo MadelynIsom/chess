@@ -1,5 +1,12 @@
 package chess;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+
+import java.lang.reflect.Type;
+
 public class BoardImpl implements ChessBoard{
     private int boardSize;
     protected ChessPiece[][] boardPositions;
@@ -16,6 +23,12 @@ public class BoardImpl implements ChessBoard{
             for(int j = 0; j < boardSize; j++){
                 boardPositions[i][j] = board.getPiece(new PositionImpl(i +1, j +1));
             }
+        }
+    }
+
+    public static class ChessBoardAdapter implements JsonDeserializer<ChessBoard> {
+        public ChessBoard deserialize(JsonElement el, Type type, JsonDeserializationContext ctx) throws JsonParseException {
+            return ctx.deserialize(el, BoardImpl.class);
         }
     }
 

@@ -1,6 +1,8 @@
 
+import chess.ChessGame;
 import org.junit.jupiter.api.*;
 import request_response.*;
+import webSocketMessages.serverMessages.ServerMessage;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -9,11 +11,11 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class ServerFacadeTests {
+public class ServerFacadeTests implements ServerListener{
     URI uri = new URI("http://localhost:8080");
-    ServerFacade server = new ServerFacade(uri);
+    ServerFacade server = new ServerFacade(uri, this);
 
-    public ServerFacadeTests() throws URISyntaxException {
+    public ServerFacadeTests() throws Exception {
     }
 
     @BeforeEach
@@ -145,10 +147,10 @@ public class ServerFacadeTests {
         CreateGameResponse createGameResponse = server.createGame(new CreateGameRequest(token1, "For The Throne"));
         Integer gameID = createGameResponse.gameID;
 
-        JoinGameRequest joinGameRequest1 = new JoinGameRequest(token1, PlayerColor.BLACK, gameID);
+        JoinGameRequest joinGameRequest1 = new JoinGameRequest(token1, ChessGame.TeamColor.BLACK, gameID);
         JoinGameResponse joinGameResponse1 = server.joinGame(joinGameRequest1);
 
-        JoinGameRequest joinGameRequest2 = new JoinGameRequest(token2, PlayerColor.WHITE, gameID);
+        JoinGameRequest joinGameRequest2 = new JoinGameRequest(token2, ChessGame.TeamColor.WHITE, gameID);
         JoinGameResponse joinGameResponse2 = server.joinGame(joinGameRequest2);
 
         assertEquals(200, joinGameResponse1.statusCode.code);
@@ -166,7 +168,7 @@ public class ServerFacadeTests {
         CreateGameRequest createGameRequest = new CreateGameRequest(token, "myGame");
         CreateGameResponse createGameResponse = server.createGame(createGameRequest);
 
-        JoinGameRequest joinGameRequest = new JoinGameRequest(uuid.toString(), PlayerColor.WHITE, createGameResponse.gameID);
+        JoinGameRequest joinGameRequest = new JoinGameRequest(uuid.toString(), ChessGame.TeamColor.WHITE, createGameResponse.gameID);
         JoinGameResponse joinGameResponse = server.joinGame(joinGameRequest);
 
         assertEquals(401, joinGameResponse.statusCode.code);
@@ -189,20 +191,24 @@ public class ServerFacadeTests {
         CreateGameResponse createGameResponse = server.createGame(new CreateGameRequest(token1, "For The Throne"));
         Integer gameID = createGameResponse.gameID;
 
-        JoinGameRequest joinGameRequest1 = new JoinGameRequest(token1, PlayerColor.BLACK, gameID);
+        JoinGameRequest joinGameRequest1 = new JoinGameRequest(token1, ChessGame.TeamColor.BLACK, gameID);
         server.joinGame(joinGameRequest1);
 
-        JoinGameRequest joinGameRequest2 = new JoinGameRequest(token2, PlayerColor.WHITE, gameID);
+        JoinGameRequest joinGameRequest2 = new JoinGameRequest(token2, ChessGame.TeamColor.WHITE, gameID);
         server.joinGame(joinGameRequest2);
 
-        JoinGameRequest joinGameRequest3 = new JoinGameRequest(token3, PlayerColor.WHITE, gameID);
+        JoinGameRequest joinGameRequest3 = new JoinGameRequest(token3, ChessGame.TeamColor.WHITE, gameID);
         JoinGameResponse joinGameResponse3 = server.joinGame(joinGameRequest3);
 
-        JoinGameRequest joinGameRequest4 = new JoinGameRequest(token3, PlayerColor.BLACK, gameID);
+        JoinGameRequest joinGameRequest4 = new JoinGameRequest(token3, ChessGame.TeamColor.BLACK, gameID);
         JoinGameResponse joinGameResponse4 = server.joinGame(joinGameRequest4);
 
         assertEquals(403, joinGameResponse3.statusCode.code);
         assertEquals(403, joinGameResponse4.statusCode.code);
     }
 
+    @Override
+    public void onServerMessage(ServerMessage message) {
+
+    }
 }

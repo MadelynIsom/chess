@@ -26,7 +26,7 @@ public class CreateGame {
                 Random rand = new Random();
                 Integer gameID = rand.nextInt(999999999);
                 GameImpl gameImpl = new GameImpl();
-                model.Game game = new Game(gameID,null, null, createGameRequest.gameName, gameImpl);
+                model.Game game = new Game(gameID,null, null, createGameRequest.gameName, gameImpl, false);
                 GameDAO.createGame(game);
                 return new CreateGameResponse(game.gameID);
             }

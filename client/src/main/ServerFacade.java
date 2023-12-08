@@ -1,10 +1,15 @@
 import chess.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
+import com.google.gson.*;
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import model.AuthToken;
 import request_response.*;
+import webSocketMessages.serverMessages.ErrorMessage;
+import webSocketMessages.serverMessages.LoadGameMessage;
+import webSocketMessages.serverMessages.NotificationMessage;
+import webSocketMessages.serverMessages.ServerMessage;
+import webSocketMessages.userCommands.*;
 
+import javax.websocket.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,9 +17,12 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 
-public class ServerFacade { URI uri;
+public class ServerFacade extends Endpoint {
+    private URI uri;
+    private Session session;
 
  static class ResponseObj<T>{
      public StatusCode responseCode;
@@ -23,8 +31,33 @@ public class ServerFacade { URI uri;
 
  }
 
- public ServerFacade(URI uri){
+ public ServerFacade(URI uri, ServerListener listener) throws Exception {
      this.uri = uri;
+
+     WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+     this.session = container.connectToServer(this, new URI("ws://localhost:8080/connect"));
+
+     this.session.addMessageHandler(new MessageHandler.Whole<String>() {
+         public void onMessage(String message) {
+
+             final RuntimeTypeAdapterFactory<ServerMessage> serverMessageFactory = RuntimeTypeAdapterFactory
+                     .of(ServerMessage.class, "serverMessageType", true)
+                     .registerSubtype(NotificationMessage.class, String.valueOf(ServerMessage.ServerMessageType.NOTIFICATION))
+                     .registerSubtype(ErrorMessage.class, String.valueOf(ServerMessage.ServerMessageType.ERROR))
+                     .registerSubtype(LoadGameMessage.class, String.valueOf(ServerMessage.ServerMessageType.LOAD_GAME));
+
+
+             var builder = new GsonBuilder();
+             builder.registerTypeAdapter(ChessGame.class, new GameImpl.ChessGameAdapter());
+             builder.registerTypeAdapter(ChessBoard.class, new BoardImpl.ChessBoardAdapter());
+             builder.registerTypeAdapter(ChessPiece.class, new PieceImpl.ChessPieceAdapter());
+
+             builder.registerTypeAdapterFactory(serverMessageFactory);
+
+             var response = builder.create().fromJson(message, ServerMessage.class);
+             listener.onServerMessage(response);
+         }
+     });
  }
 
     public void clearDatabase() throws Exception {
@@ -97,16 +130,49 @@ public class ServerFacade { URI uri;
     }
 
     public JoinGameResponse joinGame(JoinGameRequest req) throws Exception {
-        var body = new Gson().toJson(Map.of("playerColor", req.playerColor, "gameID", req.gameID));
+        var map = new HashMap<String, Object>();
+        map.put("gameID", req.gameID);
+        if(req.playerColor != null){
+            map.put("playerColor", req.playerColor);
+        }
+        var body = new Gson().toJson(map);
         var httpConnection = sendRequest(uri + "/game", "PUT", body, req.authToken);
 
         ResponseObj<JoinGameResponse> resObj = receiveResponse(httpConnection, JoinGameResponse.class);
         if(resObj.responseCode == StatusCode.SUCCESS){
+            if(req.playerColor == null){
+                JoinObserverCommand command = new JoinObserverCommand(req.authToken, req.gameID);
+                var msg = new Gson().toJson(command);
+                this.send(msg);
+            }
+            else{
+                JoinPlayerCommand command = new JoinPlayerCommand(req.authToken, req.gameID, req.playerColor);
+                var msg = new Gson().toJson(command);
+                this.send(msg);
+            }
             return resObj.body;
         }
         else{
             return new JoinGameResponse(resObj.responseCode, resObj.errorMessage);
         }
+    }
+
+    public void makeMove(String authToken, int gameID, ChessMove move) throws Exception {
+        MakeMoveCommand command = new MakeMoveCommand(authToken, gameID, move);
+        var msg = new Gson().toJson(command);
+        this.send(msg);
+    }
+
+    public void resign(String authToken, int gameID) throws Exception {
+        ResignCommand command = new ResignCommand(authToken, gameID);
+        var msg = new Gson().toJson(command);
+        this.send(msg);
+    }
+
+    public void leave(String authToken, int gameID) throws Exception {
+        LeaveCommand command = new LeaveCommand(authToken, gameID);
+        var msg = new Gson().toJson(command);
+        this.send(msg);
     }
 
     private HttpURLConnection sendRequest(String url, String method, String body, String authToken) throws URISyntaxException, IOException {
@@ -181,5 +247,12 @@ public class ServerFacade { URI uri;
             responseBody = getSerializer().fromJson(inputStreamReader, cls);
         }
         return responseBody;
+    }
+
+    private void send(String msg) throws Exception {
+        this.session.getBasicRemote().sendText(msg);
+    }
+
+    public void onOpen(Session session, EndpointConfig endpointConfig) {
     }
 }

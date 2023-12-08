@@ -30,9 +30,9 @@ public class DAOTests {
 
     private static final User user = new User("georgie", "help", "SS.Georgie");
 
-    private static final Game game = new Game(2, "Simba", "Scar", "For the Throne", new GameImpl());
-    private static final Game gameUpdate = new Game(2, "Nala", "Simba", "For Pride Rock", new GameImpl());
-    private static final Game game2 = new Game(45, "Charlie", "Willie", "For the Candy!", new GameImpl());
+    private static final Game game = new Game(2, "Simba", "Scar", "For the Throne", new GameImpl(), false);
+    private static final Game gameUpdate = new Game(2, "Nala", "Simba", "For Pride Rock", new GameImpl(), false);
+    private static final Game game2 = new Game(45, "Charlie", "Willie", "For the Candy!", new GameImpl(), false);
 
     @BeforeAll
     public static void configureDatabase() throws DataAccessException {

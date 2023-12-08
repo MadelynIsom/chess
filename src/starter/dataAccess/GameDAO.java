@@ -35,22 +35,23 @@ public class GameDAO {
 
     public static void createGame(model.Game game) throws DataAccessException {
         if(queryGame(game.gameID) == null){
-            createGame(game.gameID, game.whiteUsername, game.blackUsername, game.gameName, game.game); //Database Access
+            createGame(game.gameID, game.whiteUsername, game.blackUsername, game.gameName, game.game, game.complete); //Database Access
         }
         else{
             throw new DataAccessException("Error: already taken");
         }
     }
 
-    private static void createGame(Integer gameID, String whiteUsername, String blackUsername, String gameName, GameImpl game) throws DataAccessException {
+    private static void createGame(Integer gameID, String whiteUsername, String blackUsername, String gameName, GameImpl game, boolean complete) throws DataAccessException {
         Connection conn = DB.getConnection();
         String jsonGameRep = serializeGame(game);
-        try (var preparedStatement = conn.prepareStatement("INSERT INTO gameTable (gameID, whiteUsername, blackUsername, gameName, gameImpl) VALUES(?, ?, ?, ?, ?)")) {
+        try (var preparedStatement = conn.prepareStatement("INSERT INTO gameTable (gameID, whiteUsername, blackUsername, gameName, gameImpl, complete) VALUES(?, ?, ?, ?, ?, ?)")) {
             preparedStatement.setInt(1, gameID);
             preparedStatement.setString(2, whiteUsername);
             preparedStatement.setString(3, blackUsername);
             preparedStatement.setString(4, gameName);
             preparedStatement.setString(5, jsonGameRep);
+            preparedStatement.setBoolean(6, complete);
 
             preparedStatement.executeUpdate();
         }
@@ -90,7 +91,7 @@ public class GameDAO {
 
     private static model.Game queryGame(int gameID) throws DataAccessException {
         Connection conn = DB.getConnection();
-        try (var preparedStatement = conn.prepareStatement("SELECT gameID, whiteUsername, blackUsername, gameName, gameImpl FROM gameTable WHERE gameID=?")) {
+        try (var preparedStatement = conn.prepareStatement("SELECT gameID, whiteUsername, blackUsername, gameName, gameImpl, complete FROM gameTable WHERE gameID=?")) {
             preparedStatement.setInt(1, gameID);
             try (var rs = preparedStatement.executeQuery()) {
                 if (rs.next()) { // moves to next row in the result set; returns false if there are no more items in the set
@@ -99,10 +100,11 @@ public class GameDAO {
                     String blackUsername = rs.getString("blackUsername");
                     String gameName = rs.getString("gameName");
                     String gameImpl = rs.getString("gameImpl");
+                    boolean complete = rs.getBoolean("complete");
 
                     GameImpl gameObj = deserializeGame(gameImpl);
 
-                    return new Game(ID, whiteUsername, blackUsername, gameName, gameObj);
+                    return new Game(ID, whiteUsername, blackUsername, gameName, gameObj, complete);
                 }
                 else{
                     return null;
@@ -134,7 +136,7 @@ public class GameDAO {
     public static ArrayList<model.Game> listGames() throws DataAccessException {
         Connection conn = DB.getConnection();
         ArrayList<model.Game> games = new ArrayList<>();
-        try (var preparedStatement = conn.prepareStatement("SELECT gameID, whiteUsername, blackUsername, gameName, gameImpl FROM gameTable ORDER BY gameID")) {
+        try (var preparedStatement = conn.prepareStatement("SELECT gameID, whiteUsername, blackUsername, gameName, gameImpl, complete FROM gameTable ORDER BY gameID")) {
             try (var rs = preparedStatement.executeQuery()) {
                 while (rs.next()) { // moves to next row in the result set; returns false if there are no more items in the set
                     int ID = rs.getInt("gameID");
@@ -142,10 +144,11 @@ public class GameDAO {
                     String blackUsername = rs.getString("blackUsername");
                     String gameName = rs.getString("gameName");
                     String gameImpl = rs.getString("gameImpl");
+                    boolean complete = rs.getBoolean("complete");
 
                     GameImpl gameObj = deserializeGame(gameImpl);
 
-                    games.add(new Game(ID, whiteUsername, blackUsername, gameName, gameObj));
+                    games.add(new Game(ID, whiteUsername, blackUsername, gameName, gameObj, complete));
                 }
                 return games;
             }
@@ -184,11 +187,12 @@ public class GameDAO {
             throw new DataAccessException("Error: bad request");
         }
         String gameState = serializeGame(game.game);
-        try (var preparedStatement = conn.prepareStatement("UPDATE gameTable SET whiteUsername=?, blackUsername=?, gameImpl=? WHERE gameID=?")) {
+        try (var preparedStatement = conn.prepareStatement("UPDATE gameTable SET whiteUsername=?, blackUsername=?, gameImpl=?, complete=? WHERE gameID=?")) {
             preparedStatement.setString(1, game.whiteUsername);
             preparedStatement.setString(2, game.blackUsername);
             preparedStatement.setString(3, gameState);
-            preparedStatement.setInt(4, game.gameID);
+            preparedStatement.setBoolean(4, game.complete);
+            preparedStatement.setInt(5, game.gameID);
 
             preparedStatement.executeUpdate();
         }

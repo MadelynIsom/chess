@@ -1,4 +1,5 @@
 package passoffTests.serverTests;
+import chess.ChessGame;
 import dataAccess.*;
 import model.*;
 import org.junit.jupiter.api.*;
@@ -145,10 +146,10 @@ public class ServiceTests {
         CreateGameResponse createGameResponse = new CreateGame().createGame(new CreateGameRequest(token1, "For The Throne"));
         Integer gameID = createGameResponse.gameID;
 
-        JoinGameRequest joinGameRequest1 = new JoinGameRequest(token1, PlayerColor.BLACK, gameID);
+        JoinGameRequest joinGameRequest1 = new JoinGameRequest(token1, ChessGame.TeamColor.BLACK, gameID);
         JoinGameResponse joinGameResponse1 = new JoinGame().joinGame(joinGameRequest1);
 
-        JoinGameRequest joinGameRequest2 = new JoinGameRequest(token2, PlayerColor.WHITE, gameID);
+        JoinGameRequest joinGameRequest2 = new JoinGameRequest(token2, ChessGame.TeamColor.WHITE, gameID);
         JoinGameResponse joinGameResponse2 = new JoinGame().joinGame(joinGameRequest2);
 
         assert(joinGameResponse1.statusCode.code == 200);
@@ -166,7 +167,7 @@ public class ServiceTests {
         CreateGameRequest createGameRequest = new CreateGameRequest(token, "myGame");
         CreateGameResponse createGameResponse = new CreateGame().createGame(createGameRequest);
 
-        JoinGameRequest joinGameRequest = new JoinGameRequest(uuid.toString(), PlayerColor.WHITE, createGameResponse.gameID);
+        JoinGameRequest joinGameRequest = new JoinGameRequest(uuid.toString(), ChessGame.TeamColor.WHITE, createGameResponse.gameID);
         JoinGameResponse joinGameResponse = new JoinGame().joinGame(joinGameRequest);
 
         assert(joinGameResponse.statusCode.code == 401 && joinGameResponse.errorMessage.equals("Error: unauthorized"));
@@ -189,16 +190,16 @@ public class ServiceTests {
         CreateGameResponse createGameResponse = new CreateGame().createGame(new CreateGameRequest(token1, "For The Throne"));
         Integer gameID = createGameResponse.gameID;
 
-        JoinGameRequest joinGameRequest1 = new JoinGameRequest(token1, PlayerColor.BLACK, gameID);
+        JoinGameRequest joinGameRequest1 = new JoinGameRequest(token1, ChessGame.TeamColor.BLACK, gameID);
         new JoinGame().joinGame(joinGameRequest1);
 
-        JoinGameRequest joinGameRequest2 = new JoinGameRequest(token2, PlayerColor.WHITE, gameID);
+        JoinGameRequest joinGameRequest2 = new JoinGameRequest(token2, ChessGame.TeamColor.WHITE, gameID);
         new JoinGame().joinGame(joinGameRequest2);
 
-        JoinGameRequest joinGameRequest3 = new JoinGameRequest(token3, PlayerColor.WHITE, gameID);
+        JoinGameRequest joinGameRequest3 = new JoinGameRequest(token3, ChessGame.TeamColor.WHITE, gameID);
         JoinGameResponse joinGameResponse3 = new JoinGame().joinGame(joinGameRequest3);
 
-        JoinGameRequest joinGameRequest4 = new JoinGameRequest(token3, PlayerColor.BLACK, gameID);
+        JoinGameRequest joinGameRequest4 = new JoinGameRequest(token3, ChessGame.TeamColor.BLACK, gameID);
         JoinGameResponse joinGameResponse4 = new JoinGame().joinGame(joinGameRequest4);
 
         assertEquals(403, joinGameResponse3.statusCode.code);

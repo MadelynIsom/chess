@@ -1,11 +1,11 @@
 package service;
 
+import chess.ChessGame;
 import dataAccess.DataAccessException;
 import dataAccess.*;
 import model.*;
 import request_response.JoinGameRequest;
 import request_response.JoinGameResponse;
-import request_response.PlayerColor;
 import request_response.StatusCode;
 
 /**
@@ -31,12 +31,12 @@ public class JoinGame {
             if(joinGameRequest.playerColor == null){
                 return new JoinGameResponse(StatusCode.SUCCESS);
             }
-            if(joinGameRequest.playerColor == PlayerColor.WHITE && game.whiteUsername == null){
+            if(joinGameRequest.playerColor == ChessGame.TeamColor.WHITE && game.whiteUsername == null){
                 game.whiteUsername = username;
                 GameDAO.updateGame(game);
                 return new JoinGameResponse(StatusCode.SUCCESS);
             }
-            else if(joinGameRequest.playerColor == PlayerColor.BLACK && game.blackUsername == null){
+            else if(joinGameRequest.playerColor == ChessGame.TeamColor.BLACK && game.blackUsername == null){
                 game.blackUsername = username;
                 GameDAO.updateGame(game);
                 return new JoinGameResponse(StatusCode.SUCCESS);

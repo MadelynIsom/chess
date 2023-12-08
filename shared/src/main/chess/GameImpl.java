@@ -1,5 +1,11 @@
 package chess;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +22,13 @@ public class GameImpl implements ChessGame{
         isWhiteTurn = true;
         teamTurn = TeamColor.WHITE;
     }
+
+    public static class ChessGameAdapter implements JsonDeserializer<ChessGame> {
+        public ChessGame deserialize(JsonElement el, Type type, JsonDeserializationContext ctx) throws JsonParseException {
+            return ctx.deserialize(el, GameImpl.class);
+        }
+    }
+
     @Override
     public TeamColor getTeamTurn() {
         if(isWhiteTurn){
@@ -118,7 +131,7 @@ public class GameImpl implements ChessGame{
         ChessPiece.PieceType promotionPiece = move.getPromotionPiece();
         ChessPiece piece = board.getPiece(startPosition);
         Collection<ChessMove> validMoves = validMoves(startPosition);
-        if(getTeamTurn() == piece.getTeamColor() && validMoves.contains(move)){ //if it is the piece's team's turn & move is valid...
+        if(piece != null && getTeamTurn() == piece.getTeamColor() && validMoves.contains(move)){ //if it is the piece's team's turn & move is valid...
             if(promotionPiece != null && piece.getPieceType() == ChessPiece.PieceType.PAWN && (endPosition.getRow() == 8 || endPosition.getRow() == 1)){
                 ChessPiece newPromotionPiece = new PieceImpl(promotionPiece, piece.getTeamColor());
                 board.removePiece(startPosition, piece);

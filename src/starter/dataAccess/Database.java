@@ -82,6 +82,7 @@ public class Database {
                 blackUsername VARCHAR(255),
                 gameName VARCHAR(255) NOT NULL,
                 gameImpl TEXT NOT NULL,
+                complete TINYINT NOT NULL,
                 PRIMARY KEY (gameID)
             )""";
 

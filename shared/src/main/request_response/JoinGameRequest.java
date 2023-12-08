@@ -1,4 +1,7 @@
 package request_response;
+
+import chess.ChessGame;
+
 /**
  * represents a request from the client to join a game
  * stores the color the user wants and the ID of the game being joined
@@ -11,13 +14,13 @@ public class JoinGameRequest {
     /**
      * the team color the user wants to play as
      */
-    public PlayerColor playerColor;
+    public ChessGame.TeamColor playerColor;
     /**
      * the unique ID for the game
      */
     public int gameID;
 
-    public JoinGameRequest(String authToken, PlayerColor playerColor, int gameID){
+    public JoinGameRequest(String authToken, ChessGame.TeamColor playerColor, int gameID){
         this.authToken = authToken;
         this.playerColor = playerColor;
         this.gameID = gameID;
